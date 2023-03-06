@@ -49,15 +49,19 @@
         </style>
     </head>
     <body onload="readJson()">
+
         <script language="javascript">
+            // Variable to store the json from the website so don't need to find it again
             var json;
+
+            // Function reads in json and filters the genres
             function readJson() {
                 var list = [];
                 $.get("https://nate-nemeth27.github.io/cs20/songs.json", function (data) {
-                    // document.write(JSON.stringify(data));
                     json = data;
+                    var genres = document.getElementById("genres");
+                    // Add every genre to select field
                     data.forEach(function(song) {
-                        var genres = document.getElementById("genres");
                         song.genre.forEach(function(genre) {
                             if (!list.includes(genre)) {
                                 genres.innerHTML += "<option value='" + genre + "'>" + genre + "</option>";
@@ -68,6 +72,7 @@
                 });
             }
 
+            // Finds all songs that have the genre currently selected
             function showRes() {
                 var selector = document.getElementById("genres").value;
                 var res = document.getElementById("results");
@@ -81,12 +86,15 @@
 
         </script>
         <form>
+            <!-- Select Box -->
             <select name="genres" id="genres">
                 <option disabled selected value>Pick a Genre</option>
             </select>
             <br/>
+            <!-- Submit Button -->
             <button type="button" onclick="showRes()">Filter</button>
         </form>
+        <!-- Results to be filled in from Javascript -->
         <div id="results">
 
         </div>
