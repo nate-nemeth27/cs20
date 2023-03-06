@@ -4,22 +4,92 @@
         <title>
             JSON 2
         </title>
-        <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+        <!-- Got from lecture slides, unclear what this does -->
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+    
+        <style>
+            body {
+                text-align: center;
+                background-color: navy;
+                color:azure;
+                font-size: 20px;
+            }
+            table {
+                margin: auto;
+            }
+            select {
+                text-align: center;
+                font-size: 30px;
+                font-weight: bold;
+                width: 15%;
+                height: 60px;
+                margin: 2% 0%;
+                background-color: cyan;
+            }
+            select:hover {
+                background-color: plum;
+            }
+            button {
+                margin-bottom: 5%;
+                width: 10%;
+                padding: 2%;
+                font-size: 30px;
+                font-weight: bold;
+                border-radius: 50%;
+                background-color: cyan;
+            }
+            button:hover {
+                background-color: plum;
+            }
+            td.title {
+                font-weight: bold;
+                text-decoration: underline;
+                font-size: 25px;
+            }
+        </style>
     </head>
-    <body>
+    <body onload="readJson()">
         <script language="javascript">
-            // $.get("songs.json", function(data) {
-            //     alert("hi");
-            //     document.write(JSON.stringify(data));
-            // })
-            $.get("https://nate-nemeth27.github.io/cs20/songs.json", function (data) {
-                alert("hi");
-                // $.each(data, function( key, val ) {
-                //     document.write(key, val);
-                // })
-            });
+            var json;
+            function readJson() {
+                var list = [];
+                $.get("https://nate-nemeth27.github.io/cs20/songs.json", function (data) {
+                    // document.write(JSON.stringify(data));
+                    json = data;
+                    data.forEach(function(song) {
+                        var genres = document.getElementById("genres");
+                        song.genre.forEach(function(genre) {
+                            if (!list.includes(genre)) {
+                                genres.innerHTML += "<option value='" + genre + "'>" + genre + "</option>";
+                            }
+                            list.push(genre);
+                        });
+                    });
+                });
+            }
+
+            function showRes() {
+                var selector = document.getElementById("genres").value;
+                var res = document.getElementById("results");
+                res.innerHTML = "";
+                json.forEach(function(song) {
+                    if (song.genre.includes(selector)) {
+                        res.innerHTML += "<table><tr><td class='title'>" + song.title + "</td></tr>" + "<tr><td> Artist: " + song.artist + "</td></tr>" + "<tr><td> Genre: " + song.genre + "</td></tr>" + "<tr><td> Released " + song.year + "</td></tr></table><br/><br/>";
+                    }
+                });
+            }
+
         </script>
-        heyo
+        <form>
+            <select name="genres" id="genres">
+                <option disabled selected value>Pick a Genre</option>
+            </select>
+            <br/>
+            <button type="button" onclick="showRes()">Filter</button>
+        </form>
+        <div id="results">
+
+        </div>
     </body>
 
 </html>
